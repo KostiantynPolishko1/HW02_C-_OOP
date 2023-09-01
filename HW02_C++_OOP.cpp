@@ -13,12 +13,13 @@ int main()
 
 	int arrNum[MAX_SIZE]{};
 	int arrType[TYPE_SIZE]{};
-	char arrPassword[MAX_SIZE]{};
+	int arrType4[][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };
+
+	char arrPass[MAX_SIZE]{' '};
 
 	cout << "Start!\n";
-
+	//fill by type symbols the cells of code
 	int i = 0;
-	//fila by type symbols the cells of code
 	do {
 
 		int count = 0;
@@ -51,9 +52,48 @@ int main()
 
 	} while (true);
 
-	cout << "\nnum type: | ";
+	cout << "\narrNum: | ";
 	for (const short int& element : arrNum)
 		cout << element<< " | ";
+
+	//fill pasword by symbols depend from them type defined before
+	bool isSymbol;
+	for (short int i = 0; i < MAX_SIZE;) {
+
+		isSymbol = false;
+		char symPass;
+
+		if (arrNum[i] == 0)
+			symPass = rand() % 10 + '0';
+
+		else if (arrNum[i] == 1)
+			symPass = rand() % 26 + 'a';
+
+		else if (arrNum[i] == 2)
+			symPass = rand() % 26 + 'A';
+
+		else if (arrNum[i] == 3)
+			symPass = rand() % 15 + '!';
+
+
+		for (short int j = 0; j < i; j++) {
+
+			if (arrPass[i] == arrPass[j]) {
+				isSymbol = true;
+				break;
+			}
+		}
+
+		if (!isSymbol) {
+			arrPass[i] = symPass;
+			i++;
+		}
+	}
+
+	cout << "\narrPass: | ";
+	for (const unsigned char& element : arrPass)
+		cout << element << " | ";
+	cout << "\n";
 
 	return 0;
 }
