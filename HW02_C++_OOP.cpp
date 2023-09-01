@@ -3,7 +3,6 @@
 
 const int MAX_SIZE = 12;
 const int TYPE_SIZE = 4;
-const int STEP_CODE = 4;
 
 int main()
 {
@@ -12,50 +11,49 @@ int main()
 	using std::cin;
 	using std::endl;
 
-	int arrNum[MAX_SIZE]{0};
+	int arrNum[MAX_SIZE]{};
+	int arrType[TYPE_SIZE]{};
 	char arrPassword[MAX_SIZE]{};
-	bool isCode = false;
 
 	cout << "Start!\n";
 
-	for (short int n = 0; n < MAX_SIZE; n += STEP_CODE) //generation type symbol code
-	{
-		int arrTemp[TYPE_SIZE]{ 0 };
+	int i = 0;
+	//fila by type symbols the cells of code
+	do {
 
-		for (short int i = 0; i < TYPE_SIZE;) {
+		int count = 0;
+		for (int j = 0; j < TYPE_SIZE; j++)
+			arrType[j] = 1;
 
-			isCode = false;
-			int numRandType = rand() % TYPE_SIZE;
+		for (; i < MAX_SIZE; ) {
 
-			for (short int j = 0; j < i; j++) {
+			int randNum = rand() % TYPE_SIZE;
 
-				if (arrTemp[j] == numRandType) {
-					isCode = true;
-					break;
-				}
-			}
+			if (i > 0 && randNum == arrNum[i - 1])
+				continue;
 
-			if (!isCode) {
-				arrTemp[i] = numRandType;
-				i++;
-			}
+			else if (i > 0 && arrType[randNum] == 0)
+				continue;
+
+			arrType[randNum] -= 1;
+			arrNum[i] = randNum;
+
+			i++;
+			count++;
+
+			if (count < TYPE_SIZE)
+				continue;
+			break;
 		}
 
-		for (short int i = 0; i < TYPE_SIZE; i++)
-			arrNum[i + n] = arrTemp[i];
-	}
+		if (!(i < MAX_SIZE))
+			break;
 
-	cout << "\nbefore\n";
+	} while (true);
+
+	cout << "\nnum type: | ";
 	for (const short int& element : arrNum)
 		cout << element<< " | ";
-
-	for (short int i = STEP_CODE; i < MAX_SIZE; i += STEP_CODE)//check neighbour items is equal
-		if (arrNum[i] == arrNum[i - 1])
-			std::swap(arrNum[i], arrNum[i+1]);
-
-	cout << "\nafter\n";
-	for (const short int& element : arrNum)
-		cout << element << " | ";
 
 	return 0;
 }
