@@ -3,6 +3,7 @@
 
 const int MAX_SIZE = 12;
 const int TYPE_SIZE = 4;
+const int TYPE4_SIZE = 4;
 
 int main()
 {
@@ -13,9 +14,9 @@ int main()
 
 	int arrNum[MAX_SIZE]{};
 	int arrType[TYPE_SIZE]{};
-	int arrType4[][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };
+	int arrType4[TYPE4_SIZE][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };
 
-	char arrPass[MAX_SIZE]{' '};
+	char arrPass[MAX_SIZE]{};
 
 	cout << "Start!\n";
 	//fill by type symbols the cells of code
@@ -72,9 +73,13 @@ int main()
 		else if (arrNum[i] == 2)
 			symPass = rand() % 26 + 'A';
 
-		else if (arrNum[i] == 3)
-			symPass = rand() % 15 + '!';
+		else if (arrNum[i] == 3) {
 
+			short int numType4 = rand() % TYPE4_SIZE;
+			short int divValue = (arrType4[numType4][1] - arrType4[numType4][0]) + 1;
+
+			symPass = (rand() % (divValue)+arrType4[numType4][0]);
+		}
 
 		for (short int j = 0; j < i; j++) {
 
