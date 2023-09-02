@@ -21,7 +21,7 @@ int main()
 
 	cout << "\n\tenter qty of password -> ";
 	numPass = checkValue();
-	cout << "\thas been done " << numPass << " password" << (numPass > 1 ? "s.\n" : ".\n");
+	cout << "\thas been done " << numPass << " password" << (numPass > 1 ? "s. Length = " : ". Length = ") << MAX_SIZE << "\n";
 
 	for (short int n = 0; n < numPass; n++) {
 
@@ -47,7 +47,7 @@ int main()
 				else if (pos > 0 && arrType[randNum] == 0)
 					continue;
 
-				arrType[randNum] -= 1;
+				arrType[randNum] = 0;
 				arrNum[pos] = randNum;
 
 				pos++;
@@ -69,6 +69,9 @@ int main()
 
 		//fill pasword by symbols depend from them type defined before
 		bool isSymbol;
+		short int count = 0;
+		short int arrNumType4[TYPE4_SIZE] = { 1, 1, 1, 1 };
+
 		for (short int i = 0; i < MAX_SIZE;) {
 
 			isSymbol = false;
@@ -85,10 +88,28 @@ int main()
 
 			else if (arrNum[i] == 3) {
 
-				short int numType4 = rand() % TYPE4_SIZE;
-				short int divValue = (arrType4[numType4][1] - arrType4[numType4][0]) + 1;
+				short int indType4 = 0;
 
-				symPass = rand() % (divValue)+arrType4[numType4][0];
+				//check and use the different diapasons of special symbols of ASCII code
+				if (!(count < TYPE4_SIZE)) {
+					count = 0;
+					for (short int j = 0; j < TYPE4_SIZE; j++)
+						arrNumType4[j] = 1;
+				}
+
+				while (true) {
+					indType4 = rand() % TYPE4_SIZE;
+
+					if (arrNumType4[indType4] == 0)
+						continue;
+					break;
+				}
+
+				arrNumType4[indType4] = 0;
+				count++;
+
+				short int divValue = (arrType4[indType4][1] - arrType4[indType4][0]) + 1;
+				symPass = rand() % (divValue)+arrType4[indType4][0];
 			}
 
 			for (short int j = 0; j < i; j++) {
@@ -105,7 +126,7 @@ int main()
 			}
 		}
 
-		cout << "\nPassword " << n + 1 << ": ";
+		cout << "\n\tPassword " << n + 1 << ": ";
 		for (const unsigned char& element : arrPass)
 			cout << element;
 	}
@@ -116,7 +137,7 @@ int main()
 
 int checkValue()
 {
-	int a = 0.0;
+	int a = 0;
 	while (true) // the cycle continues until the user enters the correct value
 	{
 		std::cin >> a;
