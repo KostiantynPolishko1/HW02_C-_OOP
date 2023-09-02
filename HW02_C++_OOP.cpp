@@ -1,6 +1,8 @@
 #include <iostream>
 #include <time.h>
 
+int checkValue();
+
 const int MAX_SIZE = 12;
 const int TYPE_SIZE = 4;
 const int TYPE4_SIZE = 4;
@@ -12,93 +14,122 @@ int main()
 	using std::cin;
 	using std::endl;
 
-	int arrNum[MAX_SIZE]{};
-	int arrType[TYPE_SIZE]{};
-	int arrType4[TYPE4_SIZE][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };
+	int numPass = 0;
+	int arrType4[TYPE4_SIZE][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };//ASCII code positions of special symbols
 
-	char arrPass[MAX_SIZE]{};
+	cout << "\nPASSWORDS GENERATION";
 
-	cout << "Start!\n";
-	//fill by type symbols the cells of code
-	int i = 0;
-	do {
+	cout << "\n\tenter qty of password -> ";
+	numPass = checkValue();
+	cout << "\thas been done " << numPass << " password" << (numPass > 1 ? "s.\n" : ".\n");
 
-		int count = 0;
-		for (int j = 0; j < TYPE_SIZE; j++)
-			arrType[j] = 1;
+	for (short int n = 0; n < numPass; n++) {
 
-		for (; i < MAX_SIZE; ) {
+		int arrType[TYPE_SIZE]{};
+		int arrNum[MAX_SIZE]{};
+		char arrPass[MAX_SIZE]{};
 
-			int randNum = rand() % TYPE_SIZE;
+		//fill by type symbols the cells of code
+		int pos = 0;
+		do {
 
-			if (i > 0 && randNum == arrNum[i - 1])
-				continue;
+			int count = 0;
+			for (int j = 0; j < TYPE_SIZE; j++)
+				arrType[j] = 1;
 
-			else if (i > 0 && arrType[randNum] == 0)
-				continue;
+			for (; pos < MAX_SIZE; ) {
 
-			arrType[randNum] -= 1;
-			arrNum[i] = randNum;
+				int randNum = rand() % TYPE_SIZE;
 
-			i++;
-			count++;
+				if (pos > 0 && randNum == arrNum[pos - 1])
+					continue;
 
-			if (count < TYPE_SIZE)
-				continue;
-			break;
-		}
+				else if (pos > 0 && arrType[randNum] == 0)
+					continue;
 
-		if (!(i < MAX_SIZE))
-			break;
+				arrType[randNum] -= 1;
+				arrNum[pos] = randNum;
 
-	} while (true);
+				pos++;
+				count++;
 
-	cout << "\narrNum: | ";
-	for (const short int& element : arrNum)
-		cout << element<< " | ";
-
-	//fill pasword by symbols depend from them type defined before
-	bool isSymbol;
-	for (short int i = 0; i < MAX_SIZE;) {
-
-		isSymbol = false;
-		char symPass;
-
-		if (arrNum[i] == 0)
-			symPass = rand() % 10 + '0';
-
-		else if (arrNum[i] == 1)
-			symPass = rand() % 26 + 'a';
-
-		else if (arrNum[i] == 2)
-			symPass = rand() % 26 + 'A';
-
-		else if (arrNum[i] == 3) {
-
-			short int numType4 = rand() % TYPE4_SIZE;
-			short int divValue = (arrType4[numType4][1] - arrType4[numType4][0]) + 1;
-
-			symPass = (rand() % (divValue)+arrType4[numType4][0]);
-		}
-
-		for (short int j = 0; j < i; j++) {
-
-			if (arrPass[i] == arrPass[j]) {
-				isSymbol = true;
+				if (count < TYPE_SIZE)
+					continue;
 				break;
+			}
+
+			if (!(pos < MAX_SIZE))
+				break;
+
+		} while (true);
+
+		//cout << "\narrNum: | "; //print type of symbols by cells of passwords
+		//for (const short int& element : arrNum)
+		//	cout << element<< " | ";
+
+		//fill pasword by symbols depend from them type defined before
+		bool isSymbol;
+		for (short int i = 0; i < MAX_SIZE;) {
+
+			isSymbol = false;
+			char symPass;
+
+			if (arrNum[i] == 0)
+				symPass = rand() % 10 + '0';
+
+			else if (arrNum[i] == 1)
+				symPass = rand() % 26 + 'a';
+
+			else if (arrNum[i] == 2)
+				symPass = rand() % 26 + 'A';
+
+			else if (arrNum[i] == 3) {
+
+				short int numType4 = rand() % TYPE4_SIZE;
+				short int divValue = (arrType4[numType4][1] - arrType4[numType4][0]) + 1;
+
+				symPass = rand() % (divValue)+arrType4[numType4][0];
+			}
+
+			for (short int j = 0; j < i; j++) {
+
+				if (arrPass[i] == arrPass[j]) {
+					isSymbol = true;
+					break;
+				}
+			}
+
+			if (!isSymbol) {
+				arrPass[i] = symPass;
+				i++;
 			}
 		}
 
-		if (!isSymbol) {
-			arrPass[i] = symPass;
-			i++;
-		}
+		cout << "\nPassword " << n + 1 << ": ";
+		for (const unsigned char& element : arrPass)
+			cout << element;
 	}
-
-	cout << "\narrPass: | ";
-	for (const unsigned char& element : arrPass)
-		cout << element << " | ";
 	cout << "\n";
 
 	return 0;
+}
+
+int checkValue()
+{
+	int a = 0.0;
+	while (true) // the cycle continues until the user enters the correct value
+	{
+		std::cin >> a;
+		if (std::cin.fail()) // if the previous extraction was unsuccessful,
+		{
+			std::cout << "Incorrect input.\n\tEnter value in digit format: ";
+			std::cin.clear(); // then return the cin to 'normal' mode of operation
+			std::cin.ignore(32767, '\n'); // and remove the previous input values from the input buffer
+		}
+		else // if all is well, return a
+		{
+			std::cin.ignore(32767, '\n'); // and remove the previous input values from the input buffer
+			return abs(a);
+		}
+	}
 }
