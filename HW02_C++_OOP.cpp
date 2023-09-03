@@ -3,7 +3,7 @@
 
 int checkValue();
 
-const int MAX_SIZE = 12;
+const int SIZE = 254;
 const int TYPE_SIZE = 4;
 const int TYPE4_SIZE = 4;
 
@@ -15,19 +15,30 @@ int main()
 	using std::endl;
 
 	int numPass = 0;
+	int MAX_SIZE = 0;
 	int arrType4[TYPE4_SIZE][2] = { {33, 47}, {58, 64}, {91, 96}, {123, 126} };//ASCII code positions of special symbols
 
-	cout << "\nPASSWORDS GENERATION";
+	while (true) {
+		cout << "\nPASSWORDS GENERATION\n";
 
-	cout << "\n\tenter qty of password -> ";
+		cout << "\tenter size of password (4...24) -> ";
+		MAX_SIZE = checkValue();
+
+		if (MAX_SIZE <= 24 && MAX_SIZE >= 4)
+			break;
+		system("CLS");
+	}
+
+	cout << "\tenter qty of password -> ";
 	numPass = checkValue();
-	cout << "\thas been done " << numPass << " password" << (numPass > 1 ? "s. Length = " : ". Length = ") << MAX_SIZE << "\n";
+	
+	cout << "\thas been done " << numPass << " password" << ((numPass > 1) ? "s. Length = " : ". Length = ") << MAX_SIZE << "\n";
 
 	for (short int n = 0; n < numPass; n++) {
 
 		int arrType[TYPE_SIZE]{};
-		int arrNum[MAX_SIZE]{};
-		char arrPass[MAX_SIZE]{};
+		int arrNum[SIZE]{};
+		char arrPass[SIZE]{};
 
 		//fill by type symbols the cells of code
 		int pos = 0;
@@ -37,7 +48,8 @@ int main()
 			for (int j = 0; j < TYPE_SIZE; j++)
 				arrType[j] = 1;
 
-			for (; pos < MAX_SIZE; ) {
+			for (; pos < MAX_SIZE; ) 
+{
 
 				int randNum = rand() % TYPE_SIZE;
 
@@ -68,6 +80,7 @@ int main()
 		//	cout << element<< " | ";
 
 		//fill pasword by symbols depend from them type defined before
+
 		bool isSymbol;
 		short int count = 0;
 		short int arrNumType4[TYPE4_SIZE] = { 1, 1, 1, 1 };
